@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fullName       String
+  userName       String?
+  email          String  @unique
+  hashedPassword String
+
+  tech_skills TechSkill[]
+
+  @@map("users")
+}
+
+model BroadcastList {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  WhatsappNo String @unique
+
+  @@map("broadcast_list")
+}
+
+model TechSkill {
+  id    Int    @id @default(autoincrement())
+  skill String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
